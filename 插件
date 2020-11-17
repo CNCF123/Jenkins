@@ -1,58 +1,43 @@
-Active+Choices+Plugin
+Active Choices
 
-Build User Vars Plugin：用户变量获取插件
-Build Pipeline Plugin View ：Pipeline 管道流图表展示插件
-
-Build Flow Plugin：工作流插件，支持DSL脚本定义工作流
-Build Graph View Plugin：build Flow插件视图（安装后需要重新才能生效
-
-
-Build Pipeline
-
-Build User Vars Plugin
-Build Pipeline Plugin View
-
+Build User Vars 
 Build Environment Plugin
-
-
+Build Monitor View
+Build With Parameters
 Backup
 
-git
-Git Parameter
 docker
-kubernetes
-
-gitlab
-GitLab Hook
-SonarQube Scanner
-
-Job Generator
-
-pipeline
-Pipeline:Job
-
-Multijob
-
-Join
-
-
-Build Monitor View
-
-Performance
+docker api
 
 Email Extension
 
-Workspace Cleanup
+git
+Git Parameter
+Git Pipeline for Blue Ocean
+
+gitlab
+Gitlab Authentication
+Gitlab API
+GitLab Hook
+
+Job Generator
+Join
+
+kubernetes
+
+Multijob
+
+pipeline
+Pipeline:Job
+Performance
 
 Role-based
 
+SonarQube Scanner
 
-SCM Sync Configuration
-
-
+Workspace Cleanup
 
 构建参数
-
 hidden-parameter
 extended-choice-parameter
 validating-string-parameter
