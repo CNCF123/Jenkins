@@ -2,9 +2,17 @@ Build User Vars
 Build Environment Plugin
 Build Monitor View
 Build With Parameters
+Build Pipeline
+Build Timeout
+Built-on Column：展示实际执行任务的Node名称
+
 Backup
 
+Cron Column 定期执行
+Configuration Slicing 批量修改JOB的配置
+
 Email Extension
+Embeddable Build Status 通过简单的方式，将Job最近一次构建（Build）的状态展现出来
 
 Git
 Git Parameter
@@ -12,6 +20,7 @@ Git Pipeline for Blue Ocean
 Gitlab
 Gitlab Authentication
 Gitlab API
+Groovy
 
 HTTP Request
 
@@ -24,10 +33,12 @@ Kubernetes Client API
 Kubernetes CLI
 Kubernetes Credentials
 
+Mask Passwords 密码加密
 Multijob
 
 pipeline
 Pipeline:Job
+Pipeline: Shared Groovy Libraries
 Performance
 
 Parameterized Trigger  该插件可以让你在构建完成后触发新的构建，并为这次新构建使用不同的方式指定一些参数
@@ -38,6 +49,7 @@ Role-based
 SonarQube Scanner
 
 Template Project
+Timestamper  耗时分析
 
 Workspace Cleanup
 
