@@ -13,6 +13,9 @@ Gitlab
 Gitlab Authentication
 Gitlab API
 
+HTTP Request
+
+Job Configuration History
 Job Generator
 Join
 
@@ -27,9 +30,14 @@ pipeline
 Pipeline:Job
 Performance
 
+Parameterized Trigger  该插件可以让你在构建完成后触发新的构建，并为这次新构建使用不同的方式指定一些参数
+
+Rebuilder
 Role-based
 
 SonarQube Scanner
+
+Template Project
 
 Workspace Cleanup
 
