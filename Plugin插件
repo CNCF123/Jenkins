@@ -32,6 +32,8 @@ kubernetes
 Kubernetes Client API
 Kubernetes CLI
 Kubernetes Credentials
+Kubernetes Credentials Provider
+Kubernetes :: Pipeline :: DevOps Steps
 
 Mask Passwords 密码加密
 Multijob
