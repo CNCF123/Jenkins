@@ -220,7 +220,3 @@ spec:
     TAG = ''
   }
 }
-
-
-
-openssl pkcs12 -export -out /tmp/default.pfx -inkey admin-key.pem -in admin.pem -certfile ca.pem
