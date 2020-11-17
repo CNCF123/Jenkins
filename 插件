@@ -9,14 +9,12 @@ docker api
 
 Email Extension
 
-git
+Git
 Git Parameter
 Git Pipeline for Blue Ocean
-
-gitlab
+Gitlab
 Gitlab Authentication
 Gitlab API
-GitLab Hook
 
 Job Generator
 Join
