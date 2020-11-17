@@ -1,5 +1,3 @@
-Active Choices
-
 Build User Vars 
 Build Environment Plugin
 Build Monitor View
@@ -24,6 +22,9 @@ Job Generator
 Join
 
 kubernetes
+Kubernetes Client API
+Kubernetes CLI
+Kubernetes Credentials
 
 Multijob
 
@@ -38,7 +39,14 @@ SonarQube Scanner
 Workspace Cleanup
 
 构建参数
-hidden-parameter
-extended-choice-parameter
-validating-string-parameter
-extensible-choice-parameter
+Active Choices
+Hidden Parameter
+Extended Choice Parameter
+Validating String Parameter
+Extensible Choice Parameter
+
+Blue Ocean:
+Blue Ocean
+Blue Ocean Pipeline Editor	
+Events API for Blue Ocean
+i18n for Blue Ocean
