@@ -2,7 +2,6 @@ Backup
 
 Build Environment
 Build Monitor View
-Build Pipeline
 Build Timeout
 Build User Vars 
 Build With Parameters
@@ -10,7 +9,6 @@ Build With Parameters
 Built-on Column：展示实际执行任务的Node名称
 
 Cron Column 定期执行
-Configuration Slicing 批量修改JOB的配置
 
 Email Extension Template
 Embeddable Build Status 通过简单的方式，将Job最近一次构建（Build）的状态展现出来
