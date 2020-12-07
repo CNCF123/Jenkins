@@ -1,0 +1,28 @@
+相关文章
+https://cloud.tencent.com/developer/article/1594773
+https://blog.51cto.com/825536458/2463717
+
+---
+
+Kubernetes的配置文件admin.conf,即/etc/kubernetes/admin.conf
+文件中有三个值 certificate-authority-data 、client-certificate-data 、 client-key-data
+
+解码它们获得证书 ，注意将上面的值替换称自己的一大长传字符串
+echo certificate-authority-data | base64 -d > ca.crt
+echo client-certificate-data | base64 -d > client.crt
+echo client-key-data | base64 -d > client.key
+
+根据这三个文件生成一个PKCS12格式的客户端证书文件
+openssl pkcs12 -export -out cert.pfx -inkey client.key -in client.crt -certfile ca.crt
+注意生成证书的时候，一定要填写密码（123456），后面会用到
+
+
+回到Jenkins添加一个云的界面
+1.将ca.crt中的内容填写到 Kubernetes server certificate key 字段 (Kubernetes 服务证书 key)
+  Kubernetes 地址  https://192.168.90.230:6443 (注意https)
+
+2.添加客户端证书
+
+3.上传证书，填写密码（123456），即可
+
+4.完成后点击测试连接查看是否成功
