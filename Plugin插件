@@ -1,6 +1,12 @@
 Backup
 
-Build Environment
+Blue Ocean:
+  Config API for Blue Ocean
+  Blue Ocean Pipeline Editor
+  Dashboard for Blue Ocean
+  i18n for Blue Ocean
+  
+
 Build Monitor View
 Build Timeout
 Build User Vars 
@@ -28,12 +34,12 @@ Job Configuration History
 Job Generator 就是用来生成job的job，该job是一个模版，根据填入的参数生成不同的job
 Join 此插件允许在所有直接下游作业完成后运行一个作业。通过这种方式，执行可以并行地分支并执行许多步骤，然后在所有并行工作完成后，最后运行一次聚合步骤。
 
-kubernetes
-Kubernetes Client API
-Kubernetes CLI
-Kubernetes Credentials
-Kubernetes Credentials Provider
-Kubernetes :: Pipeline :: DevOps Steps
+kubernetes:
+  Kubernetes Client API
+  Kubernetes CLI
+  Kubernetes Credentials
+  Kubernetes Credentials Provider
+  Kubernetes :: Pipeline :: DevOps Steps
 
 LDAP
 Locale 国际化/本地化的支持
@@ -42,7 +48,6 @@ Localization: Chinese (Simplified)
 Parameterized Trigger  该插件可以让你在构建完成后触发新的构建，并为这次新构建使用不同的方式指定一些参数
 
 pipeline
-Pipeline: Shared Groovy Libraries
 
 Rebuilder
 Role-based
@@ -52,17 +57,9 @@ SonarQube
 Template Project
 Timestamper  耗时分析
 
-Workspace Cleanup
-
 构建参数:
-Active Choices
-Hidden Parameter
-Extended Choice Parameter
-Validating String Parameter
-Extensible Choice Parameter
-
-Blue Ocean:
-Blue Ocean
-Blue Ocean Pipeline Editor	
-Events API for Blue Ocean
-i18n for Blue Ocean
+  Active Choices
+  Hidden Parameter
+  Extended Choice Parameter
+  Validating String Parameter
+  Extensible Choice Parameter
