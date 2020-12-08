@@ -28,8 +28,6 @@ Gitlab Authentication
 
 Groovy
 
-HTTP Request
-
 Job Configuration History
 Job Generator 就是用来生成job的job，该job是一个模版，根据填入的参数生成不同的job
 Join 此插件允许在所有直接下游作业完成后运行一个作业。通过这种方式，执行可以并行地分支并执行许多步骤，然后在所有并行工作完成后，最后运行一次聚合步骤。
