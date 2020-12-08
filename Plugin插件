@@ -38,7 +38,6 @@ kubernetes:
   Kubernetes Client API
   Kubernetes CLI
   Kubernetes Credentials
-  Kubernetes Credentials Provider
   Kubernetes :: Pipeline :: DevOps Steps
 
 LDAP
