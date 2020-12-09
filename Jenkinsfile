@@ -1,4 +1,5 @@
 pipeline {
+
   agent {
     kubernetes {
       cloud 'kubernetes-default'
@@ -9,17 +10,16 @@ kind: Pod
 spec:
   containers:
     - name: jnlp
-      args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
-      image: 'registry.cn-beijing.aliyuncs.com/citools/jnlp:alpine'
+      image: "jenkins/inbound-agent:4.6-1-alpine"
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - mountPath: "/etc/localtime"
-          name: "volume-2"
+          name: "volume-time"
           readOnly: false
         - mountPath: "/etc/hosts"
           name: "volume-hosts"
           readOnly: false        
-    - name: "build-maven"
+    - name: "maven-3.6.3-jdk-8"
       command:
         - "cat"
       env:
@@ -29,12 +29,12 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "registry.cn-beijing.aliyuncs.com/citools/maven:3.5.3"
+      image: "maven:3.6.3-jdk-8"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
-          name: "volume-2"
+          name: "volume-time"
           readOnly: false
         - mountPath: "/root/.m2/"
           name: "volume-maven-repo"
@@ -42,7 +42,7 @@ spec:
         - mountPath: "/etc/hosts"
           name: "volume-hosts"
           readOnly: false
-    - name: "kubectl"
+    - name: "maven-3.6.3-jdk-11"
       command:
         - "cat"
       env:
@@ -52,12 +52,35 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "registry.cn-beijing.aliyuncs.com/citools/kubectl:self-1.17"
+      image: "maven:3.6.3-jdk-11"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
-          name: "volume-2"
+          name: "volume-time"
+          readOnly: false
+        - mountPath: "/root/.m2/"
+          name: "volume-maven-repo"
+          readOnly: false
+        - mountPath: "/etc/hosts"
+          name: "volume-hosts"
+          readOnly: false
+    - name: "kubectl-helm"
+      command:
+        - "cat"
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+      image: "syseleven/kubectl-helm:helm-3.2.4" ###该镜像需要制作，还需要kubeconf信息
+      imagePullPolicy: "IfNotPresent"
+      tty: true
+      volumeMounts:
+        - mountPath: "/etc/localtime"
+          name: "volume-time"
           readOnly: false
         - mountPath: "/var/run/docker.sock"
           name: "volume-docker"
@@ -78,12 +101,12 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "registry.cn-beijing.aliyuncs.com/citools/docker:19.03.9-git"
+      image: "docker:19.03.9-git"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
-          name: "volume-2"
+          name: "volume-time"
           readOnly: false
         - mountPath: "/var/run/docker.sock"
           name: "volume-docker"
@@ -101,7 +124,7 @@ spec:
       name: "volume-docker"
     - hostPath:
         path: "/usr/share/zoneinfo/Asia/Shanghai"
-      name: "volume-2"
+      name: "volume-time"
     - hostPath:
         path: "/etc/hosts"
       name: "volume-hosts"
@@ -111,7 +134,7 @@ spec:
     - name: "volume-kubeconfig"
       secret:
         secretName: "multi-kube-config"
-'''	
+''' 
 }
 }
 
@@ -159,7 +182,7 @@ spec:
       parallel {
         stage('Building') {
           steps {
-            container(name: 'build') {
+            container(name: 'maven-3.6.3-jdk-8') {
             sh """
             echo "Building Project..."
             ${BUILD_COMMAND}
@@ -201,12 +224,14 @@ spec:
           }
     
       steps {
-      container(name: 'kubectl') {
+      container(name: 'kubectl-helm') {
         sh """
         cat ${KUBECONFIG_PATH} > /tmp/1.yaml
   /usr/local/bin/kubectl config use-context ${CLUSTER} --kubeconfig=/tmp/1.yaml
   export KUBECONFIG=/tmp/1.yaml
   /usr/local/bin/kubectl set image ${DEPLOY_TYPE} -l ${DEPLOY_LABEL} ${CONTAINER_NAME}=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} -n ${NAMESPACE}
+
+  应该使用helm部署
 """
         }
 
@@ -219,4 +244,5 @@ spec:
     CommitMessage = ''
     TAG = ''
   }
+
 }
