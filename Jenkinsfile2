@@ -1,5 +1,5 @@
 // 公共
-def registry = "hub.cropy.cn"
+def registry = "harbor.chenkaidi.com"
 // 项目
 def project = "dev"
 def app_name = "java-demo"
