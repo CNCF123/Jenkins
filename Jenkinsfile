@@ -11,6 +11,7 @@ spec:
   containers:
     - name: jnlp
       image: "jenkins/inbound-agent:4.6-1-alpine"
+      args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - mountPath: "/etc/localtime"
