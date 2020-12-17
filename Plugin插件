@@ -60,6 +60,7 @@ Timestamper  耗时分析
 构建参数:
   Active Choices
   Hidden Parameter
+  List Git branches (and more)
   Extended Choice Parameter
   Validating String Parameter
   Extensible Choice Parameter
