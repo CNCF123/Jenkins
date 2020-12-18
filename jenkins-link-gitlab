@@ -1,0 +1,5 @@
+1.在gitlab中:
+点击“头像” --> Settings --> SSH Keys --> 将"id_rsa.pub"公钥添加进去
+
+2.在jenkins中：
+“系统管理” --> 凭据 --> 添加凭据 --> kind(选择SSH) --> 将"id_rsa"添加到"Private Key"
