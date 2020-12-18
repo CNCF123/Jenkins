@@ -1,0 +1,13 @@
+1.在jenkins中：
+“系统管理” --> 凭据 --> 添加凭据 --> kind(选择username with password) --> 将harbor的用户名添加到"username"，将harbor的密码添加到"password"，ID设置为"harbor-auth"
+
+2.使用该凭据
+withCredentials([usernamePassword(credentialsId: 'harbor-auth', passwordVariable: 'Password', usernameVariable: 'Username')]) {
+    container(name: 'docker') {
+        sh """
+        docker build -t ${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} .
+        docker login -u ${Username} -p ${Password} ${HARBOR_ADDRESS}
+        docker push ${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG}
+        """
+    }
+}
