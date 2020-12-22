@@ -2,7 +2,7 @@ pipeline {
 
   agent {
     kubernetes {
-      cloud 'kubernetes-default'
+      cloud "${K8S_NAME}"
       slaveConnectTimeout 1200
       yaml '''
 apiVersion: v1
