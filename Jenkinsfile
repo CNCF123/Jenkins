@@ -1,8 +1,7 @@
 pipeline {
-
   agent {
     kubernetes {
-      cloud "${K8S_NAME}"
+      cloud "${kubernetes_name}"
       slaveConnectTimeout 1200
       yaml '''
 apiVersion: v1
@@ -10,17 +9,15 @@ kind: Pod
 spec:
   containers:
     - name: jnlp
-      image: "jenkins/inbound-agent:4.6-1-alpine"
       args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
+      image: 'registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/jenkins-inbound-agent:4.3-9-alpine'
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "volume-time"
           readOnly: false
-        - mountPath: "/etc/hosts"
-          name: "volume-hosts"
-          readOnly: false        
-    - name: "maven-3.6.3-jdk-8"
+          
+    - name: "build"
       command:
         - "cat"
       env:
@@ -30,68 +27,17 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "maven:3.6.3-jdk-8"
+      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/maven:3.5.3"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "volume-time"
           readOnly: false
-        - mountPath: "/root/.m2/"
+        - mountPath: "/root/.m2/repository"
           name: "volume-maven-repo"
           readOnly: false
-        - mountPath: "/etc/hosts"
-          name: "volume-hosts"
-          readOnly: false
-    - name: "maven-3.6.3-jdk-11"
-      command:
-        - "cat"
-      env:
-        - name: "LANGUAGE"
-          value: "en_US:en"
-        - name: "LC_ALL"
-          value: "en_US.UTF-8"
-        - name: "LANG"
-          value: "en_US.UTF-8"
-      image: "maven:3.6.3-jdk-11"
-      imagePullPolicy: "IfNotPresent"
-      tty: true
-      volumeMounts:
-        - mountPath: "/etc/localtime"
-          name: "volume-time"
-          readOnly: false
-        - mountPath: "/root/.m2/"
-          name: "volume-maven-repo"
-          readOnly: false
-        - mountPath: "/etc/hosts"
-          name: "volume-hosts"
-          readOnly: false
-    - name: "kubectl-helm"
-      command:
-        - "cat"
-      env:
-        - name: "LANGUAGE"
-          value: "en_US:en"
-        - name: "LC_ALL"
-          value: "en_US.UTF-8"
-        - name: "LANG"
-          value: "en_US.UTF-8"
-      image: "syseleven/kubectl-helm:helm-3.2.4" ###该镜像需要制作，还需要kubeconf信息
-      imagePullPolicy: "IfNotPresent"
-      tty: true
-      volumeMounts:
-        - mountPath: "/etc/localtime"
-          name: "volume-time"
-          readOnly: false
-        - mountPath: "/var/run/docker.sock"
-          name: "volume-docker"
-          readOnly: false
-        - mountPath: "/mnt/.kube/"
-          name: "volume-kubeconfig"
-          readOnly: false
-        - mountPath: "/etc/hosts"
-          name: "volume-hosts"
-          readOnly: false
+          
     - name: "docker"
       command:
         - "cat"
@@ -102,7 +48,7 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "docker:19.03.9-git"
+      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/docker:19.03"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
@@ -115,9 +61,29 @@ spec:
         - mountPath: "/etc/hosts"
           name: "volume-hosts"
           readOnly: false
+          
+    - name: "kubectl"
+      command:
+        - "cat"
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+      image: "registry.cn-beijing.aliyuncs.com/citools/kubectl:1.17.4"
+      imagePullPolicy: "IfNotPresent"
+      tty: true
+      volumeMounts:
+        - mountPath: "/etc/localtime"
+          name: "volume-time"
+          readOnly: false
+        - mountPath: "/etc/hosts"
+          name: "volume-hosts"
+          readOnly: false
+
   restartPolicy: "Never"
-  nodeSelector:
-    build: "true"
   securityContext: {}
   volumes:
     - hostPath:
@@ -129,45 +95,21 @@ spec:
     - hostPath:
         path: "/etc/hosts"
       name: "volume-hosts"
-    - name: "volume-maven-repo"
-      hostPath:
-        path: "/opt/m2"
-    - name: "volume-kubeconfig"
-      secret:
-        secretName: "multi-kube-config"
-''' 
+    - hostPath:
+        path: "/tmp/m2"
+      name: "volume-maven-repo"
+'''	
 }
 }
 
   stages {
-    stage('pulling Code') {
-      parallel {
-        stage('pulling Code') {
-          when {
-            expression {
-              env.gitlabBranch == null
-            }
-          }
-          steps {
-            git(branch: "${BRANCH}", credentialsId: 'cdce3d8e-a859-45ac-9926-ac34236bb744', url: "${REPO_URL}")
-          }
-        }
-
-        stage('pulling Code by trigger') {
-          when {
-            expression {
-              env.gitlabBranch != null
-            }
-          }
-          steps {
-            git(url: "${REPO_URL}", branch: env.gitlabBranch, credentialsId: 'cdce3d8e-a859-45ac-9926-ac34236bb744')
-          }
-        }
-
+    stage('pulling code') {
+      steps {
+        git(url: "${GIT_URL}", branch: "${BRANCH}", changelog: true, credentialsId: 'gitlab-auth')
       }
     }
 
-    stage('initConfiguration') {
+    stage('initConfig') {
       steps {
         script {
           CommitID = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
@@ -179,32 +121,22 @@ spec:
       }
     }
 
-    stage('Building') {
-      parallel {
-        stage('Building') {
-          steps {
-            container(name: 'maven-3.6.3-jdk-8') {
-            sh """
-            echo "Building Project..."
-            ${BUILD_COMMAND}
+    stage('build') {
+      steps {
+        container(name: 'build') {
+          sh """
+          echo "Building Project..."
+          ${BUILD_COMMAND}
           """
-            }
-
-          }
-        }
-
-        stage('Scan Code') {
-          steps {
-            sh 'echo "Scan Code"'
-          }
         }
 
       }
     }
 
-    stage('Build image') {
+    stage('build docker image') {
       steps {
-                withCredentials([usernamePassword(credentialsId: 'REGISTRY_USER', passwordVariable: 'Password', usernameVariable: 'Username')]) {
+      
+      withCredentials([usernamePassword(credentialsId: 'harbor-auth', passwordVariable: 'Password', usernameVariable: 'Username')]) {
         container(name: 'docker') {
           sh """
           docker build -t ${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} .
@@ -217,25 +149,15 @@ spec:
       }
     }
 
-    stage('Deploy') {
-    when {
-            expression {
-              DEPLOY != "false"
-            }
-          }
-    
+    stage('deploy') {
       steps {
-      container(name: 'kubectl-helm') {
-        sh """
-        cat ${KUBECONFIG_PATH} > /tmp/1.yaml
-  /usr/local/bin/kubectl config use-context ${CLUSTER} --kubeconfig=/tmp/1.yaml
-  export KUBECONFIG=/tmp/1.yaml
-  /usr/local/bin/kubectl set image ${DEPLOY_TYPE} -l ${DEPLOY_LABEL} ${CONTAINER_NAME}=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} -n ${NAMESPACE}
-
-  应该使用helm部署
-"""
+        configFileProvider([configFile(fileId: "d3b40aee-6426-414c-aac0-af9f3df56b29", targetLocation: "admin.kubeconfig")]){
+          container(name: 'kubectl') {  
+            sh """
+            kubectl set image ${DEPLOY_TYPE} -l ${DEPLOY_LABEL} ${CONTAINER_NAME}=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} -n ${NAMESPACE} --kubeconfig=admin.kubeconfig
+            """
+          }
         }
-
       }
     }
 
@@ -244,6 +166,6 @@ spec:
     CommitID = ''
     CommitMessage = ''
     TAG = ''
+    
   }
-
 }
