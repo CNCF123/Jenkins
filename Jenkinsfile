@@ -25,7 +25,7 @@ spec:
           name: "volume-time"
           readOnly: false
           
-    - name: "build"
+    - name: "maven"
       command:
         - "cat"
       env:
@@ -131,7 +131,7 @@ spec:
 
     stage('build') {
       steps {
-        container(name: 'build') {
+        container(name: "${BUILD_TYPE}") {
           sh """
           echo "Building Project..."
           ${BUILD_COMMAND}
