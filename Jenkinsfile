@@ -2,13 +2,13 @@ pipeline {
   agent {
     kubernetes {
       cloud "${K8S_NAME}"
-      slaveConnectTimeout 1200
+      slaveConnectTimeout 600
       yaml '''
 apiVersion: v1
 kind: Pod
 spec:
   containers:
-    - name: jnlp
+    - name: "jnlp"
       args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
       image: 'registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/jenkins-inbound-agent:4.3-9-alpine'
       imagePullPolicy: IfNotPresent
