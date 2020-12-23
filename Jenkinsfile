@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      cloud "${kubernetes_name}"
+      cloud "${K8S_NAME}"
       slaveConnectTimeout 1200
       yaml '''
 apiVersion: v1
