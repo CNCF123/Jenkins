@@ -135,7 +135,6 @@ spec:
 
     stage('build docker image') {
       steps {
-      
       withCredentials([usernamePassword(credentialsId: 'harbor-auth', passwordVariable: 'Password', usernameVariable: 'Username')]) {
         container(name: 'docker') {
           sh """
