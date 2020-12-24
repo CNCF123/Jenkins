@@ -147,7 +147,7 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "registry.cn-beijing.aliyuncs.com/citools/kubectl:1.17.4"
+      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/kubectl-helm:1.18.8-3.3.3"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
