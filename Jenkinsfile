@@ -67,6 +67,27 @@ spec:
           name: "volume-gradle-repo"
           readOnly: false
           
+    - name: "golang"
+      command:
+        - "cat"
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/golang:1.12"
+      imagePullPolicy: "IfNotPresent"
+      tty: true
+      volumeMounts:
+        - mountPath: "/etc/localtime"
+          name: "volume-time"
+          readOnly: false
+        - mountPath: "/go/pkg"
+          name: "volume-go-pkg"
+          readOnly: false
+          
      - name: "node"
       command:
         - "cat"
@@ -155,6 +176,9 @@ spec:
         path: "/tmp/gradle"
       name: "volume-gradle-repo"
     - hostPath:
+        path: "/tmp/go-pkg"
+      name: "volume-go-pkg"
+    - hostPath:
         path: "/tmp/node_cache"
       name: "volume-node_cache"
     - hostPath:
@@ -171,18 +195,6 @@ spec:
       }
     }
 
-    stage('initConfig') {
-      steps {
-        script {
-          CommitID = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-          CommitMessage = sh(returnStdout: true, script: "git log -1 --pretty=format:'%h : %an  %s'").trim()
-          def curDate = sh(script: "date '+%Y%m%d-%H%M%S'", returnStdout: true).trim()
-          TAG = curDate[0..14] + "-" + CommitID + "-" + BRANCH
-        }
-
-      }
-    }
-
     stage('build') {
       steps {
         container(name: "${BUILD_TYPE}") {
@@ -192,6 +204,17 @@ spec:
           """
         }
 
+      }
+    }
+    
+    stage('initTag') {
+      steps {
+        script {
+          CommitID = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+          CommitMessage = sh(returnStdout: true, script: "git log -1 --pretty=format:'%h : %an  %s'").trim()
+          def curDate = sh(script: "date '+%Y%m%d-%H%M%S'", returnStdout: true).trim()
+          TAG = curDate[0..14] + "-" + CommitID + "-" + BRANCH
+        }
       }
     }
 
