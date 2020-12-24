@@ -1,5 +1,6 @@
 def harbor_url = "harbor.chenkaidi.com"
 def secret_name = "image-pull-secret"
+
 def harbor_auth = "6020966e-3469-44e7-baff-e9945fbaa4f3"
 def gitlab_auth = "1bbda277-a0e0-42c9-b4f3-be22e6344d66"
 
