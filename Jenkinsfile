@@ -88,7 +88,7 @@ spec:
           name: "volume-go-pkg"
           readOnly: false
           
-     - name: "node"
+    - name: "node"
       command:
         - "cat"
       env:
