@@ -46,6 +46,27 @@ spec:
           name: "volume-maven-repo"
           readOnly: false
           
+    - name: "gradle"
+      command:
+        - "cat"
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/gradle:5.6"
+      imagePullPolicy: "IfNotPresent"
+      tty: true
+      volumeMounts:
+        - mountPath: "/etc/localtime"
+          name: "volume-time"
+          readOnly: false
+        - mountPath: "/home/gradle/.gradle"
+          name: "volume-gradle-repo"
+          readOnly: false
+          
      - name: "node"
       command:
         - "cat"
@@ -130,6 +151,9 @@ spec:
     - hostPath:
         path: "/tmp/m2"
       name: "volume-maven-repo"
+    - hostPath:
+        path: "/tmp/gradle"
+      name: "volume-gradle-repo"
     - hostPath:
         path: "/tmp/node_cache"
       name: "volume-node_cache"
