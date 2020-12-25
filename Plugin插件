@@ -39,7 +39,6 @@ kubernetes:
   Kubernetes Client API
   Kubernetes CLI
   Kubernetes Credentials
-  Kubernetes :: Pipeline :: DevOps Steps
 
 LDAP
 Locale 国际化/本地化的支持
