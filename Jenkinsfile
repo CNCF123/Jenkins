@@ -137,7 +137,7 @@ spec:
           name: "volume-hosts"
           readOnly: false
           
-    - name: "kubectl"
+    - name: "kubectl-helm"
       command:
         - "cat"
       env:
@@ -237,7 +237,7 @@ spec:
     stage('deploy') {
       steps {
         configFileProvider([configFile(fileId: "d3b40aee-6426-414c-aac0-af9f3df56b29", targetLocation: "admin.kubeconfig")]){
-          container(name: 'kubectl') {  
+          container(name: 'kubectl-helm') {  
             sh """
             kubectl set image ${DEPLOY_TYPE} -l ${DEPLOY_LABEL} ${CONTAINER_NAME}=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} -n ${NAMESPACE} --kubeconfig=admin.kubeconfig
             """
