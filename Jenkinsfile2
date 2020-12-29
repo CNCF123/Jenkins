@@ -16,7 +16,8 @@ spec:
         - mountPath: "/etc/localtime"
           name: "volume-time"
           readOnly: false
-    - command:
+    - name: "maven"
+      command:
         - "cat"
       env:
         - name: "LANGUAGE"
@@ -27,7 +28,6 @@ spec:
           value: "en_US.UTF-8"
       image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/maven:3.5.3"
       imagePullPolicy: "IfNotPresent"
-      name: "maven"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
@@ -36,7 +36,8 @@ spec:
         - mountPath: "/root/.m2/repository"
           name: "volume-maven-repo"
           readOnly: false
-    - command:
+    - name: "golang"
+      command:
         - "cat"
       env:
         - name: "LANGUAGE"
@@ -47,13 +48,13 @@ spec:
           value: "en_US.UTF-8"
       image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/golang:1.13"
       imagePullPolicy: "IfNotPresent"
-      name: "golang"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "volume-time"
           readOnly: false
-    - command:
+    - name: "kubectl-helm"
+      command:
         - "cat"
       env:
         - name: "LANGUAGE"
@@ -64,13 +65,13 @@ spec:
           value: "en_US.UTF-8"
       image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/kubectl-helm:1.18.8-3.3.3"
       imagePullPolicy: "IfNotPresent"
-      name: "kubectl-helm"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "volume-time"
           readOnly: false
-    - command:
+    - name: "docker"
+      command:
         - "cat"
       env:
         - name: "LANGUAGE"
@@ -81,7 +82,6 @@ spec:
           value: "en_US.UTF-8"
       image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/docker:19.03"
       imagePullPolicy: "IfNotPresent"
-      name: "docker"
       tty: true
       volumeMounts:
         - mountPath: "/etc/localtime"
