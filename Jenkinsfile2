@@ -183,6 +183,5 @@ spec:
     CommitID = ''
     CommitMessage = ''
     TAG = ''
-    
   }
 }
