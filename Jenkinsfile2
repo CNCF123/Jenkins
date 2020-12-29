@@ -170,8 +170,7 @@ spec:
             else
               action=install
             fi
-            helm \${action} ${APP} harbor204-helm-chart/deployment -n ${NAMESPACE} --set container.image.repository=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME} --set container.image.tag=${TAG} --set container.port=${PORT}  --set container.command=${COMMAND} --kubeconfig=admin.kubeconfig 
-            
+            helm \${action} ${APP} harbor204-helm-chart/deployment -n ${NAMESPACE} --set container.image.repository=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME} --set container.image.tag=${TAG} --set container.port=${PORT}  --set container.command=${COMMAND} --kubeconfig=admin.kubeconfig
             """
             }
           }
