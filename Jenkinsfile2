@@ -52,24 +52,7 @@ spec:
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "volume-time"
-          readOnly: false
-    - name: "kubectl-helm"
-      command:
-        - "cat"
-      env:
-        - name: "LANGUAGE"
-          value: "en_US:en"
-        - name: "LC_ALL"
-          value: "en_US.UTF-8"
-        - name: "LANG"
-          value: "en_US.UTF-8"
-      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/kubectl-helm:1.18.8-3.3.3"
-      imagePullPolicy: "IfNotPresent"
-      tty: true
-      volumeMounts:
-        - mountPath: "/etc/localtime"
-          name: "volume-time"
-          readOnly: false
+          readOnly: false    
     - name: "docker"
       command:
         - "cat"
@@ -92,7 +75,25 @@ spec:
           readOnly: false
         - mountPath: "/etc/hosts"
           name: "volume-hosts"
+          readOnly: false        
+    - name: "kubectl-helm"
+      command:
+        - "cat"
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/kubectl-helm:1.18.8-3.3.3"
+      imagePullPolicy: "IfNotPresent"
+      tty: true
+      volumeMounts:
+        - mountPath: "/etc/localtime"
+          name: "volume-time"
           readOnly: false
+
   restartPolicy: "Never"
   securityContext: {}
   volumes:
