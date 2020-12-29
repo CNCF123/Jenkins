@@ -36,7 +36,6 @@ spec:
         - mountPath: "/root/.m2/repository"
           name: "volume-maven-repo"
           readOnly: false
-          
     - command:
         - "cat"
       env:
