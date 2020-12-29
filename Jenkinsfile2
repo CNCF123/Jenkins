@@ -93,7 +93,6 @@ spec:
         - mountPath: "/etc/localtime"
           name: "volume-time"
           readOnly: false
-
   restartPolicy: "Never"
   securityContext: {}
   volumes:
@@ -115,7 +114,7 @@ spec:
 
   stages {
       
-    stage('pulling code') {
+    stage('pull code') {
       steps {
         git(url: "${GIT_URL}", branch: "${BRANCH}", changelog: true, credentialsId: 'gitlab-auth')
       }
@@ -129,7 +128,6 @@ spec:
           def curDate = sh(script: "date '+%Y%m%d-%H%M%S'", returnStdout: true).trim()
           TAG = curDate[0..14] + "-" + CommitID + "-" + BRANCH
         }
-
       }
     }
 
@@ -141,23 +139,20 @@ spec:
           ${BUILD_COMMAND}
           """
         }
-
       }
     }
 
     stage('build docker image') {
       steps {
-      
-      withCredentials([usernamePassword(credentialsId: 'harbor-auth', passwordVariable: 'Password', usernameVariable: 'Username')]) {
-        container(name: 'docker') {
-          sh """
-          docker build -t ${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} .
-          docker login -u ${Username} -p ${Password} ${HARBOR_ADDRESS}
-          docker push ${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG}
-          """
+        withCredentials([usernamePassword(credentialsId: 'harbor-auth', passwordVariable: 'Password', usernameVariable: 'Username')]) {
+          container(name: 'docker') {
+            sh """
+            docker build -t ${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG} .
+            docker login -u ${Username} -p ${Password} ${HARBOR_ADDRESS}
+            docker push ${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME}:${TAG}
+            """
+          }
         }
-        }
-
       }
     }
 
@@ -175,7 +170,6 @@ spec:
             else
               action=install
             fi
-            
             helm \${action} ${APP} harbor204-helm-chart/deployment -n ${NAMESPACE} --set container.image.repository=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME} --set container.image.tag=${TAG} --set container.port=${PORT}  --set container.command=${COMMAND} --kubeconfig=admin.kubeconfig 
             
             """
