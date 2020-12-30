@@ -162,7 +162,9 @@ spec:
           configFileProvider([configFile(fileId: "d3b40aee-6426-414c-aac0-af9f3df56b29", targetLocation: "admin.kubeconfig")]){
             container(name: 'kubectl-helm') {  
             sh """
+            kubectl create namespace ${NAMESPACE} --kubeconfig=admin.kubeconfig | true
             kubectl create secret docker-registry image-pull-secret --docker-server=${HARBOR_ADDRESS} --docker-username=${Username} --docker-password=${Password} -n ${NAMESPACE} --kubeconfig=admin.kubeconfig | true
+            
             helm repo add harbor204-helm-chart --username=${Username} --password=${Password}  https://harbor204.chenkaidi.com/chartrepo/helm-chart
             if helm history \${APP} -n \${NAMESPACE} --kubeconfig=admin.kubeconfig &> /dev/null
               then
