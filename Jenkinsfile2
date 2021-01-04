@@ -159,7 +159,7 @@ spec:
     stage('deploy') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'harbor-auth', passwordVariable: 'Password', usernameVariable: 'Username')]) {
-          configFileProvider([configFile(fileId: "d3b40aee-6426-414c-aac0-af9f3df56b29", targetLocation: "admin.kubeconfig")]){
+          configFileProvider([configFile(fileId: "${KUBECONFIG_NAME}", targetLocation: "admin.kubeconfig")]){
             container(name: 'kubectl-helm') {  
             sh """
             kubectl create namespace ${NAMESPACE} --kubeconfig=admin.kubeconfig | true
