@@ -165,14 +165,14 @@ spec:
             kubectl create namespace ${NAMESPACE} --kubeconfig=admin.kubeconfig | true
             kubectl create secret docker-registry image-pull-secret --docker-server=${HARBOR_ADDRESS} --docker-username=${Username} --docker-password=${Password} -n ${NAMESPACE} --kubeconfig=admin.kubeconfig | true
             
-            helm repo add harbor204-helm-chart --username=${Username} --password=${Password}  https://harbor204.chenkaidi.com/chartrepo/helm-chart
+            helm repo add harbor-helm-chart --username=${Username} --password=${Password}  https://${HARBOR_ADDRESS}/chartrepo/helm-chart
             if helm history \${APP} -n \${NAMESPACE} --kubeconfig=admin.kubeconfig &> /dev/null
               then
               action=upgrade
             else
               action=install
             fi
-            helm \${action} ${APP} harbor204-helm-chart/deployment -n ${NAMESPACE} --set container.image.repository=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME} --set container.image.tag=${TAG} --set container.port=${PORT}  --set container.command=${COMMAND} --kubeconfig=admin.kubeconfig
+            helm \${action} ${APP} harbor-helm-chart/deployment -n ${NAMESPACE} --set container.image.repository=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME} --set container.image.tag=${TAG} --set container.port=${PORT}  --set container.command=${COMMAND} --kubeconfig=admin.kubeconfig
             """
             }
           }
