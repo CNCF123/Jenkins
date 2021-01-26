@@ -1,0 +1,19 @@
+#!/bin/bash
+
+helm_args=""
+
+name="zhangsan"
+
+sex="male"
+
+if [ $name != "" ]
+then
+ helm_args="$helm_args $name"
+ echo $helm_args
+fi
+
+if [ $sex != "" ]
+then
+ helm_args="$helm_args $sex"
+ echo $helm_args
+fi
