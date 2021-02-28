@@ -10,7 +10,7 @@ spec:
   containers:
     - name: jnlp
       args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
-      image: 'registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/jenkins-inbound-agent:4.3-9-alpine'
+      image: 'registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/jenkins-inbound-agent:4.6-1-alpine'
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - mountPath: "/etc/localtime"
