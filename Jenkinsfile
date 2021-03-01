@@ -172,7 +172,12 @@ spec:
             else
               action=install
             fi
-            helm \${action} ${APP} harbor-helm-chart/deployment -n ${NAMESPACE} --set container.image.repository=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME} --set container.image.tag=${TAG} --set container.port=${PORT}  --set container.command=${COMMAND} --kubeconfig=admin.kubeconfig
+            helm_args="--set container.image.repository=${HARBOR_ADDRESS}/${REGISTRY_DIR}/${IMAGE_NAME} --set container.image.tag=${TAG} --set container.port=${PORT}"
+            if [ ${COMMAND} != "" ]
+            then
+              helm_args="${helm_args} --set container.command=${COMMAND}"
+            fi
+            helm \${action} ${APP} harbor-helm-chart/deployment -n ${NAMESPACE} \${helm_args} --kubeconfig=admin.kubeconfig
             """
             }
           }
