@@ -177,6 +177,10 @@ spec:
             then
               helm_args="${helm_args} --set container.command=${COMMAND}"
             fi
+            if [ ${HPA} == true ]
+            then
+              helm_args="${helm_args} --set hpa.enable=true"
+            fi
             helm \${action} ${APP} harbor-helm-chart/deployment -n ${NAMESPACE} \${helm_args} --kubeconfig=admin.kubeconfig
             """
             }
