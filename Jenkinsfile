@@ -10,13 +10,13 @@ spec:
   containers:
     - name: jnlp
       args: [\'$(JENKINS_SECRET)\', \'$(JENKINS_NAME)\']
-      image: 'registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/jenkins-inbound-agent:4.6-1-alpine'
+      image: 'registry.cn-hangzhou.aliyuncs.com/cicd-liu-shui-xian/jenkins-inbound-agent:4.10-3-alpine'
       imagePullPolicy: IfNotPresent
       volumeMounts:
         - mountPath: "/etc/localtime"
           name: "volume-time"
           readOnly: false
-    - name: "maven"
+    - name: "maven38jdk8"
       command:
         - "cat"
       env:
@@ -26,7 +26,27 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/maven:3.5.3"
+      image: "registry.cn-hangzhou.aliyuncs.com/cicd-liu-shui-xian/maven:3.8-jdk8"
+      imagePullPolicy: "IfNotPresent"
+      tty: true
+      volumeMounts:
+        - mountPath: "/etc/localtime"
+          name: "volume-time"
+          readOnly: false
+        - mountPath: "/root/.m2/repository"
+          name: "volume-maven-repo"
+          readOnly: false
+    - name: "maven38jdk11"
+      command:
+        - "cat"
+      env:
+        - name: "LANGUAGE"
+          value: "en_US:en"
+        - name: "LC_ALL"
+          value: "en_US.UTF-8"
+        - name: "LANG"
+          value: "en_US.UTF-8"
+      image: "registry.cn-hangzhou.aliyuncs.com/cicd-liu-shui-xian/maven:3.8-jdk11"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
@@ -46,7 +66,7 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/golang:1.13"
+      image: "registry.cn-hangzhou.aliyuncs.com/cicd-liu-shui-xian/golang:1.18"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
