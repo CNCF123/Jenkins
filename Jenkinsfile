@@ -63,7 +63,7 @@ spec:
           value: "en_US.UTF-8"
         - name: "LANG"
           value: "en_US.UTF-8"
-      image: "registry.cn-hangzhou.aliyuncs.com/pipeline-cicd/docker:19.03"
+      image: "docker:19.03"
       imagePullPolicy: "IfNotPresent"
       tty: true
       volumeMounts:
